@@ -6,7 +6,14 @@ export default function Landing({ onCreateRoom, onJoinRoom }) {
   const [attributionOpen, setAttributionOpen] = useState(false);
 
   useEffect(() => {
-    audioManager.playTrackForScene('landing');
+    const playAudio = async () => {
+      try {
+        await audioManager.playTrackForScene('landing');
+      } catch (error) {
+        console.error('Failed to play landing audio:', error);
+      }
+    };
+    playAudio();
     return () => audioManager.stop();
   }, []);
 

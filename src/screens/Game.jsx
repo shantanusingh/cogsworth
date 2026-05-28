@@ -30,7 +30,14 @@ export default function Game({ room, player, onLevelComplete }) {
     }
 
     // Play Shadowland track for the current level
-    audioManager.playTrackForScene('level', room.current_level);
+    const playAudio = async () => {
+      try {
+        await audioManager.playTrackForScene('level', room.current_level);
+      } catch (error) {
+        console.error('Failed to play level audio:', error);
+      }
+    };
+    playAudio();
 
     return () => {
       // Optionally fade out on unmount

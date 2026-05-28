@@ -8,13 +8,20 @@ export default function Cutscene({ content, onComplete }) {
 
   // Initialize audio and speech
   useEffect(() => {
-    // Play "Our Story Begins" for intro, fallback for other cutscenes
-    const isIntro = content.speaker === 'HEADMISTRESS IRONCLAD';
-    if (isIntro) {
-      audioManager.playTrackForScene('introCutscene');
-    } else {
-      audioManager.playAmbient(AMBIENT_CONFIGS.cutscene);
-    }
+    const playAudio = async () => {
+      // Play "Our Story Begins" for intro, fallback for other cutscenes
+      const isIntro = content.speaker === 'HEADMISTRESS IRONCLAD';
+      if (isIntro) {
+        try {
+          await audioManager.playTrackForScene('introCutscene');
+        } catch (error) {
+          console.error('Failed to play intro audio:', error);
+        }
+      } else {
+        audioManager.playAmbient(AMBIENT_CONFIGS.cutscene);
+      }
+    };
+    playAudio();
 
     return () => audioManager.stop();
   }, [content.speaker]);

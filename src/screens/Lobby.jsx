@@ -8,7 +8,14 @@ export default function Lobby({ room, player, onGameStart }) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    audioManager.playTrackForScene('lobby');
+    const playAudio = async () => {
+      try {
+        await audioManager.playTrackForScene('lobby');
+      } catch (error) {
+        console.error('Failed to play lobby audio:', error);
+      }
+    };
+    playAudio();
     return () => audioManager.stop();
   }, []);
 

@@ -12,7 +12,14 @@ export default function Setup({ isCreating, onComplete }) {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    audioManager.playTrackForScene('setup');
+    const playAudio = async () => {
+      try {
+        await audioManager.playTrackForScene('setup');
+      } catch (error) {
+        console.error('Failed to play setup audio:', error);
+      }
+    };
+    playAudio();
     return () => audioManager.stop();
   }, []);
 

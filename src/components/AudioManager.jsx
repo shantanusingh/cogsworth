@@ -209,21 +209,28 @@ class AudioManager {
 
   async loadAudioBuffer(trackName) {
     if (this.audioCache[trackName]) {
+      console.log(`Using cached audio: ${trackName}`);
       return this.audioCache[trackName];
     }
 
     try {
       const encodedName = encodeURIComponent(trackName);
-      const response = await fetch(`/audio/${encodedName}.mp3`);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const url = `/audio/${encodedName}.mp3`;
+      console.log(`Fetching audio from: ${url}`);
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status} - File not found or server error`);
+      }
 
       const arrayBuffer = await response.arrayBuffer();
       this.init();
       const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
       this.audioCache[trackName] = audioBuffer;
+      console.log(`Successfully loaded: ${trackName}`);
       return audioBuffer;
     } catch (error) {
-      console.warn(`Failed to load audio track "${trackName}":`, error);
+      console.warn(`Failed to load audio track "${trackName}":`, error.message);
       return null;
     }
   }
@@ -252,27 +259,38 @@ class AudioManager {
 
   async playExternalTrack(trackName, loop = true) {
     this.init();
-    if (!this.musicEnabled) return;
+    if (!this.musicEnabled) {
+      console.log('Music disabled, not playing:', trackName);
+      return;
+    }
 
     this.stopAmbient();
     this.stopCurrentTrack();
 
     const buffer = await this.loadAudioBuffer(trackName);
-    if (!buffer) return; // Fallback: keep silence or use procedural
+    if (!buffer) {
+      console.warn(`Could not load audio buffer for "${trackName}"`);
+      return;
+    }
 
-    const source = this.audioContext.createBufferSource();
-    source.buffer = buffer;
-    source.loop = loop;
+    try {
+      const source = this.audioContext.createBufferSource();
+      source.buffer = buffer;
+      source.loop = loop;
 
-    const gain = this.audioContext.createGain();
-    gain.gain.value = this.musicVolume * 0.5;
+      const gain = this.audioContext.createGain();
+      gain.gain.value = this.musicVolume * 0.5;
 
-    source.connect(gain);
-    gain.connect(this.audioContext.destination);
+      source.connect(gain);
+      gain.connect(this.audioContext.destination);
 
-    source.start(this.audioContext.currentTime);
-    this.currentAudioSource = source;
-    this.currentAudioGain = gain;
+      source.start(this.audioContext.currentTime);
+      this.currentAudioSource = source;
+      this.currentAudioGain = gain;
+      console.log(`Now playing: ${trackName}`);
+    } catch (error) {
+      console.error(`Error playing track "${trackName}":`, error);
+    }
   }
 
   async playTrackForScene(sceneName, levelNumber = null) {
