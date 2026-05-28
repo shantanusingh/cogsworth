@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora&family=JetBrains+Mono&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0a0a0f;
+  color: #e0e0e0;
+  font-family: 'JetBrains Mono', monospace;
+  overflow: hidden;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cinzel', serif;
+  color: #d4a843;
+  text-shadow: 0 0 10px rgba(212, 168, 67, 0.3);
+}
+
+.story-text {
+  font-family: 'Lora', serif;
+}
+
+.terminal-prompt {
+  color: #4aff91;
+}
+
+.terminal-output {
+  color: #e0e0e0;
+}
+
+.terminal-error {
+  color: #ff6b6b;
+}
+
+.terminal-success {
+  color: #51cf66;
+}
+
+.terminal-flag {
+  color: #d4a843;
+  font-weight: bold;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4a843;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f0c060;
+}
+
+/* Smooth transitions */
+* {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+button {
+  cursor: pointer;
+  background-color: #1a1a22;
+  color: #d4a843;
+  border: 1px solid #d4a843;
+  padding: 8px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #d4a843;
+  color: #0a0a0f;
+  transform: scale(1.02);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+input, textarea {
+  background-color: #050508;
+  color: #e0e0e0;
+  border: 1px solid #d4a843;
+  padding: 8px 12px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #f0c060;
+  box-shadow: 0 0 8px rgba(240, 192, 96, 0.3);
+}
+
+/* Spinner animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #d4a843;
+  border-top: 3px solid #0a0a0f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
