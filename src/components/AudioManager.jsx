@@ -55,6 +55,27 @@ class AudioManager {
     this.musicVolume = localStorage.getItem('musicVolume') ? parseFloat(localStorage.getItem('musicVolume')) : 0.3;
     this.musicEnabled = localStorage.getItem('musicEnabled') !== 'false';
     this.sfxEnabled = localStorage.getItem('sfxEnabled') !== 'false';
+    this.contextResumeHandler = null;
+    this.setupUserGestureListener();
+  }
+
+  setupUserGestureListener() {
+    // Resume AudioContext on first user interaction (required by browser)
+    this.contextResumeHandler = () => {
+      if (this.audioContext && this.audioContext.state === 'suspended') {
+        console.log('User gesture detected, resuming AudioContext...');
+        this.audioContext.resume().then(() => {
+          console.log('AudioContext resumed from user gesture');
+        }).catch(err => {
+          console.error('Failed to resume from user gesture:', err);
+        });
+      }
+    };
+
+    // Listen for user interaction
+    document.addEventListener('click', this.contextResumeHandler);
+    document.addEventListener('touchstart', this.contextResumeHandler);
+    document.addEventListener('keydown', this.contextResumeHandler);
   }
 
   init() {
@@ -76,14 +97,20 @@ class AudioManager {
     if (!this.audioContext) return;
 
     if (this.audioContext.state === 'suspended') {
-      console.log('AudioContext suspended, attempting to resume...');
-      this.audioContext.resume().then(() => {
-        console.log('AudioContext resumed successfully');
-      }).catch(err => {
-        console.error('Failed to resume AudioContext:', err);
-      });
+      console.log('AudioContext suspended - waiting for user gesture to resume');
     } else if (this.audioContext.state === 'running') {
       console.log('AudioContext is running');
+      // Remove listener once context is running
+      this.removeUserGestureListener();
+    }
+  }
+
+  removeUserGestureListener() {
+    if (this.contextResumeHandler) {
+      document.removeEventListener('click', this.contextResumeHandler);
+      document.removeEventListener('touchstart', this.contextResumeHandler);
+      document.removeEventListener('keydown', this.contextResumeHandler);
+      console.log('Removed user gesture listeners');
     }
   }
 
@@ -124,14 +151,6 @@ class AudioManager {
 
   playAmbient(config) {
     this.init();
-
-    // Ensure audio context is running (browser security requirement)
-    if (this.audioContext.state === 'suspended') {
-      console.log('Resuming suspended audio context for ambient...');
-      this.audioContext.resume().catch(err => {
-        console.error('Failed to resume AudioContext:', err);
-      });
-    }
 
     if (!this.musicEnabled) return;
 
@@ -286,17 +305,6 @@ class AudioManager {
 
   async playExternalTrack(trackName, loop = true) {
     this.init();
-
-    // Ensure audio context is running (browser security requirement)
-    if (this.audioContext.state === 'suspended') {
-      console.log('Resuming suspended audio context...');
-      try {
-        await this.audioContext.resume();
-        console.log('AudioContext resumed successfully');
-      } catch (err) {
-        console.error('Failed to resume AudioContext:', err);
-      }
-    }
 
     if (!this.musicEnabled) {
       console.log('Music disabled, not playing:', trackName);
