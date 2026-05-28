@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import audioManager, { AMBIENT_CONFIGS } from '../components/AudioManager.jsx';
+import Attribution from '../components/Attribution.jsx';
 
 export default function Victory({ onPlayAgain }) {
+  const [attributionOpen, setAttributionOpen] = useState(false);
+
   useEffect(() => {
     audioManager.transitionTo(AMBIENT_CONFIGS.victory);
     audioManager.playSfx('victory');
@@ -104,6 +107,36 @@ export default function Victory({ onPlayAgain }) {
           ⚙ Play Again
         </button>
       </div>
+
+      {/* Footer */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '16px',
+          left: '16px',
+          right: '16px',
+          textAlign: 'center',
+          fontSize: '0.75rem',
+          color: '#666'
+        }}
+      >
+        <button
+          onClick={() => setAttributionOpen(true)}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#999',
+            cursor: 'pointer',
+            textDecoration: 'underline',
+            fontSize: '0.75rem',
+            padding: 0
+          }}
+        >
+          🎵 Audio Attribution
+        </button>
+      </div>
+
+      <Attribution isOpen={attributionOpen} onClose={() => setAttributionOpen(false)} />
     </div>
   );
 }

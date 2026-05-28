@@ -5,6 +5,7 @@ import StoryPanel from '../components/StoryPanel.jsx';
 import FlagSubmit from '../components/FlagSubmit.jsx';
 import NanoEditor from '../components/NanoEditor.jsx';
 import AudioControls from '../components/AudioControls.jsx';
+import CheatSheet from '../components/CheatSheet.jsx';
 import { getLevelByNumber } from '../engine/levels.js';
 import { createFilesystem, listFiles, readFile, writeFile, isEditableFile } from '../engine/filesystem.js';
 import { handleCommand } from '../engine/commands.js';
@@ -20,6 +21,7 @@ export default function Game({ room, player, onLevelComplete }) {
   const [nanoFilename, setNanoFilename] = useState('');
   const [messages, setMessages] = useState([]);
   const [flagSubmitLocked, setFlagSubmitLocked] = useState(false);
+  const [cheatSheetOpen, setCheatSheetOpen] = useState(false);
 
   // Initialize filesystem and play ambient music
   useEffect(() => {
@@ -128,22 +130,48 @@ export default function Game({ room, player, onLevelComplete }) {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '8px' }}>
-          {Array(8).fill(null).map((_, i) => (
-            <div
-              key={i}
-              title={`Level ${i + 1}`}
-              style={{
-                width: '10px',
-                height: '10px',
-                borderRadius: '50%',
-                backgroundColor: i < room.current_level ? '#4aff91' : i === room.current_level - 1 ? '#d4a843' : '#333'
-              }}
-            />
-          ))}
-        </div>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {Array(8).fill(null).map((_, i) => (
+              <div
+                key={i}
+                title={`Level ${i + 1}`}
+                style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  backgroundColor: i < room.current_level ? '#4aff91' : i === room.current_level - 1 ? '#d4a843' : '#333'
+                }}
+              />
+            ))}
+          </div>
 
-        <AudioControls />
+          <button
+            onClick={() => setCheatSheetOpen(true)}
+            title="Open Linux Command Cheat Sheet"
+            style={{
+              padding: '6px 12px',
+              fontSize: '12px',
+              backgroundColor: 'transparent',
+              border: '1px solid #d4a843',
+              color: '#d4a843',
+              cursor: 'pointer',
+              borderRadius: '2px',
+              fontFamily: '"JetBrains Mono", monospace',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#d4a84322';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = 'transparent';
+            }}
+          >
+            📖 Cheat Sheet
+          </button>
+
+          <AudioControls />
+        </div>
       </div>
 
       {/* Main content */}
@@ -168,6 +196,9 @@ export default function Game({ room, player, onLevelComplete }) {
         disabled={flagSubmitLocked}
         onClueClick={handleClueClick}
       />
+
+      {/* Cheat Sheet Modal */}
+      <CheatSheet isOpen={cheatSheetOpen} onClose={() => setCheatSheetOpen(false)} />
 
       {/* Nano editor overlay */}
       {nanoOpen && (
