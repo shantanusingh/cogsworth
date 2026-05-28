@@ -50,7 +50,7 @@ class AudioManager {
     this.sfxGain = null;
     this.ambientNodes = [];
     this.currentAudioSource = null;
-    this.currentAudioGain = null;
+    this.playingSources = []; // Track ALL playing sources to ensure cleanup
     this.audioCache = {};
     this.musicVolume = localStorage.getItem('musicVolume') ? parseFloat(localStorage.getItem('musicVolume')) : 0.3;
     this.musicEnabled = localStorage.getItem('musicEnabled') !== 'false';
@@ -236,19 +236,21 @@ class AudioManager {
   }
 
   stopCurrentTrack() {
-    if (this.currentAudioSource) {
+    // Stop ALL playing sources to prevent overlapping audio
+    this.playingSources.forEach(source => {
       try {
-        // Stop immediately with no delay to ensure clean transitions
-        this.currentAudioSource.stop(this.audioContext.currentTime);
-        // Disconnect the source from masterGain
-        this.currentAudioSource.disconnect();
+        source.stop(this.audioContext.currentTime);
       } catch (e) {
-        // Already stopped or disconnected
+        // Already stopped
       }
-      this.currentAudioSource = null;
-    }
-
-    this.currentAudioGain = null;
+      try {
+        source.disconnect();
+      } catch (e) {
+        // Already disconnected
+      }
+    });
+    this.playingSources = [];
+    this.currentAudioSource = null;
   }
 
   async playExternalTrack(trackName, loop = true) {
@@ -259,7 +261,7 @@ class AudioManager {
     }
 
     this.stopAmbient();
-    this.stopCurrentTrack();
+    this.stopCurrentTrack(); // Stop ALL previous sources
 
     const buffer = await this.loadAudioBuffer(trackName);
     if (!buffer) {
@@ -280,7 +282,7 @@ class AudioManager {
       const startTime = this.audioContext.currentTime + 0.01; // Small delay to ensure clean transition
       source.start(startTime);
       this.currentAudioSource = source;
-      this.currentAudioGain = null; // No individual gain node needed
+      this.playingSources = [source]; // Replace with new source, clearing old ones
       console.log(`Now playing: ${trackName}`);
     } catch (error) {
       console.error(`Error playing track "${trackName}":`, error);
