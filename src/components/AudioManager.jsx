@@ -238,22 +238,16 @@ class AudioManager {
   stopCurrentTrack() {
     if (this.currentAudioSource) {
       try {
+        // Stop immediately with no delay to ensure clean transitions
         this.currentAudioSource.stop(this.audioContext.currentTime);
+        // Disconnect the source from masterGain
+        this.currentAudioSource.disconnect();
       } catch (e) {
-        // Already stopped
+        // Already stopped or disconnected
       }
+      this.currentAudioSource = null;
     }
 
-    // Disconnect gain node
-    if (this.currentAudioGain) {
-      try {
-        this.currentAudioGain.disconnect();
-      } catch (e) {
-        // Already disconnected
-      }
-    }
-
-    this.currentAudioSource = null;
     this.currentAudioGain = null;
   }
 
@@ -278,15 +272,15 @@ class AudioManager {
       source.buffer = buffer;
       source.loop = loop;
 
-      const gain = this.audioContext.createGain();
-      gain.gain.value = this.musicVolume * 0.5;
+      // Connect directly to masterGain to avoid multiple disconnected audio chains
+      // This ensures all audio (procedural + external) goes through the same volume control
+      source.connect(this.masterGain);
 
-      source.connect(gain);
-      gain.connect(this.audioContext.destination);
-
-      source.start(this.audioContext.currentTime);
+      // Use audioContext.currentTime for accurate timing to prevent overlaps
+      const startTime = this.audioContext.currentTime + 0.01; // Small delay to ensure clean transition
+      source.start(startTime);
       this.currentAudioSource = source;
-      this.currentAudioGain = gain;
+      this.currentAudioGain = null; // No individual gain node needed
       console.log(`Now playing: ${trackName}`);
     } catch (error) {
       console.error(`Error playing track "${trackName}":`, error);
