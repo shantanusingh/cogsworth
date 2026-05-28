@@ -67,6 +67,24 @@ class AudioManager {
     this.sfxGain = this.audioContext.createGain();
     this.sfxGain.gain.value = this.musicVolume * 0.4;
     this.sfxGain.connect(this.audioContext.destination);
+
+    // Resume audio context if suspended (required by browser after user gesture)
+    this.ensureAudioContextRunning();
+  }
+
+  ensureAudioContextRunning() {
+    if (!this.audioContext) return;
+
+    if (this.audioContext.state === 'suspended') {
+      console.log('AudioContext suspended, attempting to resume...');
+      this.audioContext.resume().then(() => {
+        console.log('AudioContext resumed successfully');
+      }).catch(err => {
+        console.error('Failed to resume AudioContext:', err);
+      });
+    } else if (this.audioContext.state === 'running') {
+      console.log('AudioContext is running');
+    }
   }
 
   setVolume(volume) {
@@ -106,6 +124,15 @@ class AudioManager {
 
   playAmbient(config) {
     this.init();
+
+    // Ensure audio context is running (browser security requirement)
+    if (this.audioContext.state === 'suspended') {
+      console.log('Resuming suspended audio context for ambient...');
+      this.audioContext.resume().catch(err => {
+        console.error('Failed to resume AudioContext:', err);
+      });
+    }
+
     if (!this.musicEnabled) return;
 
     this.stopAmbient();
@@ -237,16 +264,20 @@ class AudioManager {
 
   stopCurrentTrack() {
     // Stop ALL playing sources to prevent overlapping audio
-    this.playingSources.forEach(source => {
+    console.log(`Stopping ${this.playingSources.length} playing source(s)`);
+    this.playingSources.forEach((source, idx) => {
       try {
-        source.stop(this.audioContext.currentTime);
+        console.log(`Stopping source ${idx}...`);
+        source.stop();
+        console.log(`Source ${idx} stopped`);
       } catch (e) {
-        // Already stopped
+        console.warn(`Source ${idx} already stopped:`, e.message);
       }
       try {
         source.disconnect();
+        console.log(`Source ${idx} disconnected`);
       } catch (e) {
-        // Already disconnected
+        console.warn(`Source ${idx} already disconnected:`, e.message);
       }
     });
     this.playingSources = [];
@@ -255,6 +286,18 @@ class AudioManager {
 
   async playExternalTrack(trackName, loop = true) {
     this.init();
+
+    // Ensure audio context is running (browser security requirement)
+    if (this.audioContext.state === 'suspended') {
+      console.log('Resuming suspended audio context...');
+      try {
+        await this.audioContext.resume();
+        console.log('AudioContext resumed successfully');
+      } catch (err) {
+        console.error('Failed to resume AudioContext:', err);
+      }
+    }
+
     if (!this.musicEnabled) {
       console.log('Music disabled, not playing:', trackName);
       return;
