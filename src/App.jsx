@@ -45,8 +45,8 @@ export default function App() {
     // Check if there's a next level or if game is complete
     const currentLevel = getLevelByNumber(room.current_level);
 
-    if (currentLevel && currentLevel.id === 3) {
-      // Last level (MVP has 3 levels)
+    if (currentLevel && currentLevel.id === 6) {
+      // Last level (MVP has 6 levels now)
       setScreen('victory');
     } else if (currentLevel && currentLevel.cutsceneAfter) {
       // Show cutscene between levels
