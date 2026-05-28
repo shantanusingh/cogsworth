@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { USERNAMES } from '../engine/levels.js';
 import { createRoom, joinRoom, addPlayer } from '../lib/supabase.js';
+import audioManager from '../components/AudioManager.jsx';
 
 export default function Setup({ isCreating, onComplete }) {
   const [teamName, setTeamName] = useState('');
@@ -9,6 +10,11 @@ export default function Setup({ isCreating, onComplete }) {
   const [roomCode, setRoomCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    audioManager.playTrackForScene('setup');
+    return () => audioManager.stop();
+  }, []);
 
   const handleCreateRoom = async () => {
     if (!teamName.trim() || !selectedUsername) {

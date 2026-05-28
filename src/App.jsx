@@ -45,15 +45,15 @@ export default function App() {
     // Check if there's a next level or if game is complete
     const currentLevel = getLevelByNumber(room.current_level);
 
-    if (currentLevel && currentLevel.id === 6) {
-      // Last level (MVP has 6 levels now)
+    if (currentLevel && currentLevel.id === 8) {
+      // Last level (all 8 chambers complete!)
       setScreen('victory');
     } else if (currentLevel && currentLevel.cutsceneAfter) {
       // Show cutscene between levels
       setCutsceneContent(currentLevel.cutsceneAfter);
       setScreen('cutscene');
     } else {
-      // Shouldn't reach here in MVP, but fallback to victory
+      // Shouldn't reach here, but fallback to victory
       setScreen('victory');
     }
   };

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import audioManager, { AMBIENT_CONFIGS } from '../components/AudioManager.jsx';
+import audioManager from '../components/AudioManager.jsx';
 
 export default function Landing({ onCreateRoom, onJoinRoom }) {
   useEffect(() => {
-    audioManager.playAmbient(AMBIENT_CONFIGS.landing);
+    audioManager.playTrackForScene('landing');
     return () => audioManager.stop();
   }, []);
 

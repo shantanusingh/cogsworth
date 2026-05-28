@@ -25,12 +25,32 @@ const AMBIENT_CONFIGS = {
   ]
 };
 
+// External track mappings
+const TRACK_MAPPING = {
+  landing: 'Dark Fog',
+  setup: 'Dark Fog',
+  lobby: 'Dark Fog',
+  introCutscene: 'Our Story Begins',
+  levels: [
+    'Shadowlands 5 - Antechamber',
+    'Shadowlands 3 - Machine',
+    'Division',
+    'Shadowlands 5 - Antechamber',
+    'Shadowlands 3 - Machine',
+    'Division',
+    'Shadowlands 5 - Antechamber',
+    'Shadowlands 3 - Machine'
+  ]
+};
+
 class AudioManager {
   constructor() {
     this.audioContext = null;
     this.masterGain = null;
     this.sfxGain = null;
     this.ambientNodes = [];
+    this.currentAudioSource = null;
+    this.audioCache = {};
     this.musicVolume = localStorage.getItem('musicVolume') ? parseFloat(localStorage.getItem('musicVolume')) : 0.3;
     this.musicEnabled = localStorage.getItem('musicEnabled') !== 'false';
     this.sfxEnabled = localStorage.getItem('sfxEnabled') !== 'false';
@@ -183,8 +203,79 @@ class AudioManager {
 
   stop() {
     this.stopAmbient();
+    this.stopCurrentTrack();
+  }
+
+  async loadAudioBuffer(trackName) {
+    if (this.audioCache[trackName]) {
+      return this.audioCache[trackName];
+    }
+
+    try {
+      const encodedName = encodeURIComponent(trackName);
+      const response = await fetch(`/audio/${encodedName}.mp3`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const arrayBuffer = await response.arrayBuffer();
+      this.init();
+      const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+      this.audioCache[trackName] = audioBuffer;
+      return audioBuffer;
+    } catch (error) {
+      console.warn(`Failed to load audio track "${trackName}":`, error);
+      return null;
+    }
+  }
+
+  stopCurrentTrack() {
+    if (this.currentAudioSource) {
+      try {
+        this.currentAudioSource.stop();
+      } catch (e) {
+        // Already stopped
+      }
+      this.currentAudioSource = null;
+    }
+  }
+
+  async playExternalTrack(trackName, loop = true) {
+    this.init();
+    if (!this.musicEnabled) return;
+
+    this.stopAmbient();
+    this.stopCurrentTrack();
+
+    const buffer = await this.loadAudioBuffer(trackName);
+    if (!buffer) return; // Fallback: keep silence or use procedural
+
+    const source = this.audioContext.createBufferSource();
+    source.buffer = buffer;
+    source.loop = loop;
+
+    const gain = this.audioContext.createGain();
+    gain.gain.value = this.musicVolume * 0.5;
+
+    source.connect(gain);
+    gain.connect(this.audioContext.destination);
+
+    source.start(0);
+    this.currentAudioSource = source;
+  }
+
+  async playTrackForScene(sceneName, levelNumber = null) {
+    let trackName = null;
+
+    if (sceneName === 'level' && levelNumber !== null) {
+      trackName = TRACK_MAPPING.levels[levelNumber - 1];
+    } else {
+      trackName = TRACK_MAPPING[sceneName];
+    }
+
+    if (trackName) {
+      await this.playExternalTrack(trackName, true);
+    }
   }
 }
 
 export default new AudioManager();
-export { AMBIENT_CONFIGS };
+export { AMBIENT_CONFIGS, TRACK_MAPPING };

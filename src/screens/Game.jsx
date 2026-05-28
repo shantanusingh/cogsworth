@@ -27,9 +27,8 @@ export default function Game({ room, player, onLevelComplete }) {
       fsRef.current = createFilesystem(level);
     }
 
-    // Play ambient music for the level (default to boilerRoom for all MVP levels)
-    // Future: Map level IDs to specific ambient configs
-    audioManager.playAmbient(AMBIENT_CONFIGS.boilerRoom);
+    // Play Shadowland track for the current level
+    audioManager.playTrackForScene('level', room.current_level);
 
     return () => {
       // Optionally fade out on unmount

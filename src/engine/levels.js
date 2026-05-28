@@ -164,6 +164,54 @@ export const LEVELS = [
       speaker: 'THE ENGINE ITSELF',
       text: 'The engine trembles as the Fragment materializes, its powerful core resonating with ancient magic.\n\nSix chambers restored. Halfway through your journey. Two more await—but the corruption grows desperate. The final chambers will not yield easily.'
     }
+  },
+  {
+    id: 7,
+    name: "The Orrery",
+    story: "The cosmic calculator spins with celestial mechanics, but its loop has broken—trapped in an infinite cycle. Fix the code to decode the stellar message hidden in the orbit calculations.",
+    flag: "clockwork_cosmos",
+    timerMinutes: 20,
+    unlockedCommands: ['ls', 'cat', 'python3', 'nano', 'help', 'clear', 'echo', 'env', 'export', 'grep'],
+    filesystem: {
+      'README.txt': 'Welcome to the Orrery!\n\nThe orbit calculator is broken. When you run it, it will loop forever.\n\nTry: python3 orrery.py\n\nIt will hang. Press Ctrl+C to stop it.\n\nThen use nano to fix the code:\n  nano orrery.py\n\nThe loop needs to increment its counter!',
+      'orrery.py': 'positions = [72, 101, 108, 108, 111, 44, 32, 79, 114, 114, 101, 114, 121]\ni = 0\n\nwhile i < len(positions):\n    char = chr(positions[i])\n    print(char, end="")\n    # FIX ME: i needs to increment!\n\nprint()\nprint("Runic Fragment: clockwork_cosmos")'
+    },
+    env: {},
+    clues: [
+      'Run python3 orrery.py — it gets stuck! Press Ctrl+C to escape. Then read the code.',
+      'The while loop needs `i` to increase each iteration. Add `i = i + 1` inside the loop.',
+      '(Spoiler) Add `i = i + 1` after the print statement, save, and run again.'
+    ],
+    cutsceneAfter: {
+      speaker: 'THE ORRERY',
+      text: 'The cosmic gears align as the Fragment crystallizes, its light casting ancient star-patterns across the chamber.\n\nSeven chambers restored. The corruption recoils in fear. Only the Grand Codex remains—Nullbyte\'s final stronghold. All your skills will be tested.'
+    }
+  },
+  {
+    id: 8,
+    name: "The Grand Codex",
+    story: "The heart of the Academy. Three ancient riddles guard the final Fragment. Uncover the base64 secret in the environment, find the hidden reversed message, and let the Codex itself reveal the truth.",
+    flag: "nullbyte_defeated",
+    timerMinutes: 20,
+    unlockedCommands: ['ls', 'cat', 'python3', 'help', 'clear', 'echo', 'env', 'export', 'grep'],
+    filesystem: {
+      'README.txt': 'Welcome to the Grand Codex!\n\nThree riddles guard the Fragment:\n\n1. Run: env\n   Look for CODEX_PART1 (it\'s encoded)\n\n2. Run: ls -la\n   Find the hidden file\n\n3. Read the hidden file, then run: python3 codex.py\n\nThe Codex will decode the truth.',
+      'codex.py': 'import os\nimport base64\n\n# Get the encoded part from environment\npart1_encoded = os.environ.get("CODEX_PART1", "")\nif not part1_encoded:\n    print("Error: CODEX_PART1 not found in environment")\n    exit(1)\n\n# Decode from base64\npart1 = base64.b64decode(part1_encoded).decode("utf-8")\n\n# Read the hidden file\ntry:\n    with open(".codex_fragment", "r") as f:\n        part2_reversed = f.read().strip()\nexcept:\n    print("Error: .codex_fragment not found")\n    exit(1)\n\n# Reverse the second part\npart2 = part2_reversed[::-1]\n\n# Combine and reveal\nresult = part1 + "_" + part2\nprint(f"Runic Fragment: {result}")',
+      '.codex_fragment': 'noitarotser'
+    },
+    env: {
+      'CODEX_PART1': 'bnVsbGJ5dGU=',  // base64 for "nullbyte"
+      'COGSWORTH_LEVEL': '8'
+    },
+    clues: [
+      'Use `env` to find CODEX_PART1, and `ls -la` to find the hidden file (.codex_fragment)',
+      'CODEX_PART1 is base64 encoded. The hidden file contains a reversed word. Run codex.py to combine them.',
+      '(Spoiler) `python3 codex.py` — the environment variable is already set. Just ensure .codex_fragment exists.'
+    ],
+    cutsceneAfter: {
+      speaker: 'THE GRAND CODEX',
+      text: 'All eight Runic Fragments blaze with ancient power. The corruption dissolves like smoke. Nullbyte retreats into the static, defeated and banished. The Academy breathes again—gears turning, steam flowing, magic restored.\n\nYou are true Arcane Engineers of Cogsworth Academy.'
+    }
   }
 ];
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase, startGame, subscribeToRoom, getRoomPlayers } from '../lib/supabase.js';
-import audioManager, { AMBIENT_CONFIGS } from '../components/AudioManager.jsx';
+import audioManager from '../components/AudioManager.jsx';
 
 export default function Lobby({ room, player, onGameStart }) {
   const [isHost, setIsHost] = useState(player?.is_host || false);
@@ -8,7 +8,7 @@ export default function Lobby({ room, player, onGameStart }) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    audioManager.transitionTo(AMBIENT_CONFIGS.lobby);
+    audioManager.playTrackForScene('lobby');
     return () => audioManager.stop();
   }, []);
 

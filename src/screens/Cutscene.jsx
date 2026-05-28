@@ -8,10 +8,16 @@ export default function Cutscene({ content, onComplete }) {
 
   // Initialize audio and speech
   useEffect(() => {
-    audioManager.playAmbient(AMBIENT_CONFIGS.cutscene);
+    // Play "Our Story Begins" for intro, fallback for other cutscenes
+    const isIntro = content.speaker === 'HEADMISTRESS IRONCLAD';
+    if (isIntro) {
+      audioManager.playTrackForScene('introCutscene');
+    } else {
+      audioManager.playAmbient(AMBIENT_CONFIGS.cutscene);
+    }
 
     return () => audioManager.stop();
-  }, []);
+  }, [content.speaker]);
 
 
   useEffect(() => {
