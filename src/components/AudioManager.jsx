@@ -50,6 +50,7 @@ class AudioManager {
     this.sfxGain = null;
     this.ambientNodes = [];
     this.currentAudioSource = null;
+    this.currentAudioGain = null;
     this.audioCache = {};
     this.musicVolume = localStorage.getItem('musicVolume') ? parseFloat(localStorage.getItem('musicVolume')) : 0.3;
     this.musicEnabled = localStorage.getItem('musicEnabled') !== 'false';
@@ -230,12 +231,23 @@ class AudioManager {
   stopCurrentTrack() {
     if (this.currentAudioSource) {
       try {
-        this.currentAudioSource.stop();
+        this.currentAudioSource.stop(this.audioContext.currentTime);
       } catch (e) {
         // Already stopped
       }
-      this.currentAudioSource = null;
     }
+
+    // Disconnect gain node
+    if (this.currentAudioGain) {
+      try {
+        this.currentAudioGain.disconnect();
+      } catch (e) {
+        // Already disconnected
+      }
+    }
+
+    this.currentAudioSource = null;
+    this.currentAudioGain = null;
   }
 
   async playExternalTrack(trackName, loop = true) {
@@ -258,8 +270,9 @@ class AudioManager {
     source.connect(gain);
     gain.connect(this.audioContext.destination);
 
-    source.start(0);
+    source.start(this.audioContext.currentTime);
     this.currentAudioSource = source;
+    this.currentAudioGain = gain;
   }
 
   async playTrackForScene(sceneName, levelNumber = null) {
