@@ -27,7 +27,7 @@ const AMBIENT_CONFIGS = {
 
 // External track mappings
 const TRACK_MAPPING = {
-  landing: 'Dark Fog',
+  landing: 'Discovery Hit',
   setup: 'Dark Fog',
   lobby: 'Dark Fog',
   introCutscene: 'Our Story Begins',
