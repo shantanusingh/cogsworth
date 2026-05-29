@@ -116,6 +116,20 @@ export function subscribeToChat(roomId, callback) {
     .subscribe();
 }
 
+export function subscribeToTerminalActivity(roomId, callback) {
+  return supabase.channel(`terminal:${roomId}`)
+    .on('broadcast', { event: 'terminal-output' }, ({ payload }) => callback(payload))
+    .subscribe();
+}
+
+export async function broadcastTerminalOutput(roomId, playerName, command, outputs) {
+  return supabase.channel(`terminal:${roomId}`).send({
+    type: 'broadcast',
+    event: 'terminal-output',
+    payload: { player_name: playerName, command, outputs, ts: Date.now() }
+  });
+}
+
 export async function getRoomPlayers(roomId) {
   const { data, error } = await supabase.from('players')
     .select()

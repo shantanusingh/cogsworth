@@ -57,9 +57,7 @@ export default function ChatPanel({ roomId, username, messages = [] }) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        width: '260px',
-        borderLeft: '1px solid #d4a843',
-        backgroundColor: '#0a0a0f'
+        flex: 1
       }}
     >
       <div

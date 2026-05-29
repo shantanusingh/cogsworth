@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Terminal from '../components/Terminal.jsx';
 import ChatPanel from '../components/ChatPanel.jsx';
+import ActivityPanel from '../components/ActivityPanel.jsx';
 import StoryPanel from '../components/StoryPanel.jsx';
 import FlagSubmit from '../components/FlagSubmit.jsx';
 import NanoEditor from '../components/NanoEditor.jsx';
@@ -9,7 +10,7 @@ import CheatSheet from '../components/CheatSheet.jsx';
 import { getLevelByNumber } from '../engine/levels.js';
 import { createFilesystem, listFiles, readFile, writeFile, isEditableFile } from '../engine/filesystem.js';
 import { handleCommand } from '../engine/commands.js';
-import { advanceLevel, sendChatMessage, subscribeToChat } from '../lib/supabase.js';
+import { advanceLevel, sendChatMessage, subscribeToChat, subscribeToTerminalActivity, broadcastTerminalOutput } from '../lib/supabase.js';
 import audioManager, { AMBIENT_CONFIGS } from '../components/AudioManager.jsx';
 
 export default function Game({ room, player, onLevelComplete }) {
@@ -20,6 +21,7 @@ export default function Game({ room, player, onLevelComplete }) {
   const [nanoOpen, setNanoOpen] = useState(false);
   const [nanoFilename, setNanoFilename] = useState('');
   const [messages, setMessages] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [flagSubmitLocked, setFlagSubmitLocked] = useState(false);
   const [cheatSheetOpen, setCheatSheetOpen] = useState(false);
 
@@ -53,6 +55,17 @@ export default function Game({ room, player, onLevelComplete }) {
     return () => subscription.unsubscribe();
   }, [room.id]);
 
+  // Subscribe to terminal activity
+  useEffect(() => {
+    const subscription = subscribeToTerminalActivity(room.id, (payload) => {
+      if (payload.player_name !== player.username) {
+        setActivities(prev => [...prev.slice(-99), payload]);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [room.id, player.username]);
+
   const handleCommand_ = async (line) => {
     const context = {
       fs: fsRef.current,
@@ -76,6 +89,12 @@ export default function Game({ room, player, onLevelComplete }) {
           terminalRef.current?.write(item.text, item.color);
         }
       });
+
+      // Broadcast terminal output to other players
+      const textOutputs = result.filter(r => r.text);
+      if (textOutputs.length > 0) {
+        broadcastTerminalOutput(room.id, player.username, line, textOutputs).catch(() => {});
+      }
     }
   };
 
@@ -193,8 +212,11 @@ export default function Game({ room, player, onLevelComplete }) {
           </div>
         </div>
 
-        {/* Right side: Chat */}
-        <ChatPanel roomId={room.id} username={player.username} messages={messages} />
+        {/* Right side: Activity + Chat */}
+        <div style={{ display: 'flex', flexDirection: 'column', width: '260px', borderLeft: '1px solid #d4a843', backgroundColor: '#0a0a0f' }}>
+          <ActivityPanel activities={activities} />
+          <ChatPanel roomId={room.id} username={player.username} messages={messages} />
+        </div>
       </div>
 
       {/* Footer: Clues + Flag */}
