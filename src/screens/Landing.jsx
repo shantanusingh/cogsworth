@@ -27,11 +27,27 @@ export default function Landing({ onCreateRoom, onJoinRoom }) {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#0a0a0f',
+        backgroundImage: 'url(/assets/backgropund.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         color: '#e0e0e0',
         position: 'relative',
         overflow: 'hidden'
       }}
     >
+      {/* Dark overlay for readability */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          zIndex: 1
+        }}
+      />
+
       {/* Rotating gears background */}
       <div
         style={{
@@ -67,38 +83,15 @@ export default function Landing({ onCreateRoom, onJoinRoom }) {
             fontSize: '3.5rem',
             fontFamily: '"Cinzel", serif',
             color: '#d4a843',
+            marginTop: '80px',
             marginBottom: '8px',
             textShadow: '0 0 20px rgba(212, 168, 67, 0.4)'
           }}
         >
-          COGSWORTH ACADEMY
+          COGSWORTH
         </h1>
-        <p
-          style={{
-            fontSize: '1.2rem',
-            color: '#f0c060',
-            marginBottom: '32px',
-            fontStyle: 'italic'
-          }}
-        >
-          of Arcane Engineering
-        </p>
 
-        <p
-          style={{
-            fontSize: '0.95rem',
-            color: '#999',
-            marginBottom: '48px',
-            maxWidth: '400px',
-            lineHeight: '1.6'
-          }}
-        >
-          Welcome, young engineer. Professor Nullbyte has corrupted the Academy.
-          Your skills in code and cryptography are our only hope.
-          Can you restore the Runic Fragments and defeat him?
-        </p>
-
-        <div style={{ display: 'flex', gap: '24px', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', marginTop: '240px' }}>
           <button
             onClick={onCreateRoom}
             style={{
@@ -131,7 +124,8 @@ export default function Landing({ onCreateRoom, onJoinRoom }) {
           right: '16px',
           textAlign: 'center',
           fontSize: '0.75rem',
-          color: '#666'
+          color: '#666',
+          zIndex: 10
         }}
       >
         <button

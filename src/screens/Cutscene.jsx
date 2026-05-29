@@ -72,12 +72,14 @@ export default function Cutscene({ content, onComplete }) {
       style={{
         width: '100%',
         height: '100%',
+        backgroundImage: 'url(/assets/terminal.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         backgroundColor: '#000000',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '40px',
         color: '#e0e0e0',
         fontFamily: '"JetBrains Mono", monospace',
         cursor: isComplete ? 'pointer' : 'wait',
@@ -88,12 +90,15 @@ export default function Cutscene({ content, onComplete }) {
       <div
         style={{
           position: 'absolute',
-          top: '60px',
+          top: '28%',
+          left: '50%',
+          transform: 'translateX(-50%)',
           color: '#d4a843',
           fontFamily: '"Cinzel", serif',
-          fontSize: '1.2rem',
+          fontSize: '1.1rem',
           letterSpacing: '2px',
-          textShadow: '0 0 10px rgba(212, 168, 67, 0.3)'
+          textShadow: '0 0 10px rgba(212, 168, 67, 0.3)',
+          zIndex: 10
         }}
       >
         {content.speaker}
@@ -102,13 +107,19 @@ export default function Cutscene({ content, onComplete }) {
       {/* Story text */}
       <div
         style={{
-          maxWidth: '800px',
-          fontSize: '1.1rem',
-          lineHeight: '1.8',
+          position: 'absolute',
+          top: '40%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          maxWidth: '600px',
+          width: '90%',
+          fontSize: '1rem',
+          lineHeight: '1.7',
           textAlign: 'center',
-          minHeight: '200px',
           fontFamily: '"Lora", serif',
-          whiteSpace: 'pre-wrap'
+          whiteSpace: 'pre-wrap',
+          color: '#d4a843',
+          zIndex: 10
         }}
       >
         {displayedText}
@@ -120,10 +131,13 @@ export default function Cutscene({ content, onComplete }) {
         <div
           style={{
             position: 'absolute',
-            bottom: '60px',
+            top: '54%',
+            left: '50%',
+            transform: 'translateX(-50%)',
             color: '#d4a843',
-            fontSize: '0.9rem',
-            animation: 'blink 1.5s infinite'
+            fontSize: '0.85rem',
+            animation: 'blink 1.5s infinite',
+            zIndex: 10
           }}
         >
           [ PRESS ENTER OR CLICK TO CONTINUE ]

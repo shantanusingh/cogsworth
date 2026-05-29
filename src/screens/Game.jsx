@@ -91,8 +91,9 @@ export default function Game({ room, player, onLevelComplete }) {
       audioManager.playSfx('success');
       terminalRef.current?.write('🎉 Correct flag!', 'success');
       await sendChatMessage(room.id, player.username, `✅ Solved Level ${level.id}!`, 'success');
-      await advanceLevel(room.id, level.id + 1);
-      onLevelComplete();
+      const nextLevel = level.id + 1;
+      await advanceLevel(room.id, nextLevel);
+      onLevelComplete(nextLevel);
     } else {
       audioManager.playSfx('error');
       terminalRef.current?.write('❌ Incorrect flag. Try again.', 'red');
