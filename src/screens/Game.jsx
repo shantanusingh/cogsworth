@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Terminal from '../components/Terminal.jsx';
 import ChatPanel from '../components/ChatPanel.jsx';
 import ActivityPanel from '../components/ActivityPanel.jsx';
@@ -98,21 +98,27 @@ export default function Game({ room, player, onLevelComplete }) {
     }
   };
 
-  const handleNanoSave = (newContent) => {
+  const handleNanoSave = useCallback((newContent) => {
     writeFile(fsRef.current, nanoFilename, newContent);
     setNanoOpen(false);
     terminalRef.current?.write(`[saved ${nanoFilename}]`, 'cyan');
     terminalRef.current?.writePrompt?.();
-  };
+  }, [nanoFilename]);
 
-  const handleFlagSubmit = async (isCorrect) => {
+  const handleFlagSubmit = useCallback(async (isCorrect) => {
     if (isCorrect) {
       audioManager.playSfx('success');
       terminalRef.current?.write('🎉 Correct flag!', 'success');
-      await sendChatMessage(room.id, player.username, `✅ Solved Level ${level.id}!`, 'success');
-      const nextLevel = level.id + 1;
-      await advanceLevel(room.id, nextLevel);
-      onLevelComplete(nextLevel);
+      try {
+        await sendChatMessage(room.id, player.username, `✅ Solved Level ${level.id}!`, 'success');
+        const nextLevel = level.id + 1;
+        await advanceLevel(room.id, nextLevel);
+        console.log('Flag correct, calling onLevelComplete with', nextLevel);
+        onLevelComplete(nextLevel);
+      } catch (error) {
+        console.error('Error in handleFlagSubmit:', error);
+        terminalRef.current?.write('⚠️ Error advancing level. Try again.', 'red');
+      }
     } else {
       audioManager.playSfx('error');
       terminalRef.current?.write('❌ Incorrect flag. Try again.', 'red');
@@ -120,14 +126,14 @@ export default function Game({ room, player, onLevelComplete }) {
       setFlagSubmitLocked(true);
       setTimeout(() => setFlagSubmitLocked(false), 10000);
     }
-  };
+  }, [room.id, player.username, level.id, onLevelComplete]);
 
-  const handleClueClick = async (clueIdx) => {
+  const handleClueClick = useCallback(async (clueIdx) => {
     const clue = level.clues[clueIdx];
     audioManager.playSfx('clue');
     terminalRef.current?.write(`💡 Clue ${clueIdx + 1}: ${clue}`, 'amber');
     await sendChatMessage(room.id, player.username, `💡 Revealed Clue ${clueIdx + 1}`, 'system');
-  };
+  }, [level.clues, room.id, player.username]);
 
   return (
     <div

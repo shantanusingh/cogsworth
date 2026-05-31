@@ -1,11 +1,11 @@
 export const INTRO_CUTSCENE = {
   speaker: 'HEADMISTRESS IRONCLAD',
-  text: 'The Academy shudders. Somewhere deep within the Grand Codex, Professor Nullbyte has planted a corruption — a dark algorithm that rewrites spells, locks chambers, and silences the clockwork familiars.\n\nYou are our last hope, young engineers. Eight chambers stand between you and the heart of the Codex. Each one is sealed with a Runic Fragment.\n\nYour brass terminals are your wands. Code is your magic.\n\nBegin in the Boiler Room. And do not let the gears stop turning.'
+  text: 'The Academy shudders and drops altitude! Somewhere deep within the Grand Codex, Professor Nullbyte has initiated the "Zero-Protocol" — a lock that is draining the school\'s levitation power.\n\nWe are falling 100 feet per minute toward the Abyssal Scrap-Wastes! Eight chambers stand between you and the heart of the Codex. Each one must be unlocked to reboot the systems.\n\nYour brass terminals are your wands. Linux and Python are your magic spells.\n\nBegin in the Boiler Room. Find out why Nullbyte did this, and do not let the gears stop turning!'
 };
 
 export const VICTORY_CUTSCENE = {
   speaker: 'THE GRAND CODEX',
-  text: 'All eight Runic Fragments restored. The corruption dissolves. Nullbyte retreats into the static. The Academy breathes again — gears turning, steam flowing, spells working.\n\nYou are true Arcane Engineers of Cogsworth Academy.'
+  text: 'Restoration Patch applied! The dark corruption dissolves like smoke. Professor Nullbyte is safely ejected back to reality. The Academy rises back into the sunny blue clouds — gears turning, steam flowing, magic working.\n\nYou have saved Cogsworth, Master Arcane Engineers!'
 };
 
 // Generate fake engine log with hidden message
@@ -27,34 +27,34 @@ export const LEVELS = [
   {
     id: 1,
     name: "The Boiler Room",
-    story: "The great boiler sputters and hisses. A dusty Python scroll lies on the floor. Run it to hear the incantation.",
+    story: "Red alert! Raw mana-steam is flooding the chamber, and the pressure is critical (over 280PSI)! Sprocket the clockwork safety-dragon is panicking—his brass scales are melting. Run the dusty python scroll to vent the steam before the boilers detonate!",
     flag: "steam_and_sparks",
     timerMinutes: 10,
     unlockedCommands: ['ls', 'cat', 'python3', 'help', 'clear', 'echo'],
     filesystem: {
-      'README.txt': 'Welcome to the Boiler Room!\n\nA Python scroll lies here. Try:\n  ls\n  cat scroll.py\n  python3 scroll.py',
+      'README.txt': '--- EMERGENCY VALVE MANUAL ---\nThe Boiler Room is flooding with super-heated mana-steam!\nTo trigger the emergency exhaust vents, execute the Python scroll lying on the floor.\n\nTo see the scroll: ls\nTo read its contents: cat scroll.py\nTo run the script: python3 scroll.py',
       'scroll.py': 'print("Runic Fragment: steam_and_sparks")'
     },
     env: {},
     clues: [
-      'There is a Python scroll in this chamber. Can you see it?',
-      'Try: ls then cat scroll.py to read it first',
-      '(Spoiler) Run python3 scroll.py — the flag is printed as "Runic Fragment:"'
+      'Look around the smoke! Use the \'ls\' command to see what files are in this hot mess.',
+      'Read the instructions on \'scroll.py\' with the \'cat\' command to see what spell is inside.',
+      '(Spoiler) Type \'python3 scroll.py\' into your terminal and press Enter. This executes the steam-venting program and prints your key!'
     ],
     cutsceneAfter: {
-      speaker: 'THE SENTIENT BOILER',
-      text: 'The boiler trembles and hisses triumphantly. Its valves glow with restored power. The first Fragment is returned to the Codex.\n\nYou feel a pulse of energy ripple through the Academy. Seven chambers remain.'
+      speaker: 'SPROCKET THE DRAGON',
+      text: 'Phew! My copper scales are cooled and the pressure is back to normal! Look! A charred scroll was blown out of the exhaust pipe. It\'s a page from Nullbyte\'s private diary:\n\n"May 24th: The Grand Codex is acting strangely. Yesterday, the Headmistress forgot her signature levitation spell. A digital dementia is spreading. I must freeze the core before it deletes us all..."'
     }
   },
   {
     id: 2,
     name: "The Owl Post",
-    story: "Dozens of scrolls litter the floor. One contains the Runic Fragment, but it's hidden using a dotted name. The postal owls screen at you impatiently.",
+    story: "Chaos! The pneumatic mail sorting tubes are jammed, and dozens of metal postal owls are crash-landing, screeching in distress. The routing scroll containing the navigation override is invisible, hidden by a digital camouflage spell. Reveal it using Unix commands!",
     flag: "owl_sees_all",
     timerMinutes: 10,
     unlockedCommands: ['ls', 'cat', 'python3', 'help', 'clear', 'echo'],
     filesystem: {
-      'README.txt': 'Welcome to the Owl Post!\n\nMany scrolls lie here, but the important one is hidden.\nTry: ls\nThen try: ls -la\n\nIn Unix, files starting with . are hidden from plain ls.',
+      'README.txt': '--- OWL POST OVERRIDE ---\nTo reset the pneumatic tubes and save the owls, find the routing override scroll.\nA digital camouflage spell has hidden the scroll!\n\nIn Unix, files starting with a dot (.) are hidden from standard \'ls\'.\nUse \'ls -la\' to see ALL files, including invisible ones.\nThen read the file using \'cat <filename>\'.',
       'scroll_1.txt': 'Mundane mail routing instructions for route A7.',
       'scroll_2.txt': 'Delivery schedule for the eastern tower.',
       'scroll_3.txt': 'Owl training guidelines and feeding times.',
@@ -64,69 +64,69 @@ export const LEVELS = [
     },
     env: {},
     clues: [
-      'In Unix, files starting with . are hidden from plain ls',
-      'Use ls -la to see ALL files including hidden ones',
-      '(Spoiler) cat .secret_scroll — the flag is inside'
+      'A plain \'ls\' won\'t show the hidden routing scroll. It starts with a dot (.) to bypass basic scans.',
+      'Run \'ls -la\' to reveal the invisible files in the Owl Post.',
+      '(Spoiler) Type \'cat .secret_scroll\' to open the hidden file and read the sorting override code!'
     ],
     cutsceneAfter: {
-      speaker: 'CAPTAIN FEATHERWICK (Chief Postal Owl)',
-      text: 'The head owl ruffles its brass-plated wings and delivers a satisfied screech. The Fragment glows in your hands.\n\nAhead lies the Scriptorium, where the enchanted quills grow restless. Their scratching echoes down the corridor.'
+      speaker: 'BARNABY (CHIEF POSTAL OWL)',
+      text: 'Hoot! Magnificent scanning! The routing scroll has cleared the pneumatic tubes, and my owls are airborne again. But wait... this steel capsule isn\'t mail. It\'s an intercepted transmission from Nullbyte:\n\n"May 26th: The ink in the Scriptorium is turning to grey static. It\'s rewriting our spell logs. Do not trust the Codex\'s reports. It is lying to us."'
     }
   },
   {
     id: 3,
     name: "The Scriptorium",
-    story: "An enchanted quill wrote a spell, but it has a flaw. Fix the code and run it to hear the incantation. The quill hovers impatiently, waiting for your corrections.",
+    story: "The Scriptorium's giant, ceiling-mounted Enchanted Quill is possessed! It's dripping cursed void-ink and trying to erase your names from the school archives. Its loop is broken and its colon is misplaced! Use nano to repair the spell script!",
     flag: "quill_and_code",
     timerMinutes: 10,
     unlockedCommands: ['ls', 'cat', 'python3', 'nano', 'help', 'clear', 'echo'],
     filesystem: {
-      'README.txt': 'Welcome to the Scriptorium!\n\nAn enchanted quill wrote a spell, but there\'s a syntax error.\nTry: python3 spell.py\n\nRead the error message carefully — it tells you which line is broken.\nUse nano to fix it: nano spell.py',
+      'README.txt': '--- SPELL EDITING LOG ---\nThe Enchanted Quill has lost its syntactical mind!\nRun \'python3 spell.py\' to see where the magic fails.\nRead the error message carefully—it tells you which line is broken.\n\nUse the \'nano\' editor to fix it: nano spell.py\n(Add a colon \':\' at the end of the reveal_fragment function definition on line 1).\nSave with Ctrl+S, exit with Ctrl+X, and run again!',
       'spell.py': 'def reveal_fragment()\n    print("Runic Fragment: quill_and_code")\n\nreveal_fragment()'
     },
     env: {},
     clues: [
-      'Run python3 spell.py and read the error message — it tells you the line number',
-      'Python functions need a : at the end of their definition line',
-      '(Spoiler) Add : after reveal_fragment() on line 1, save with nano, run again'
+      'Run \'python3 spell.py\' first and look at the SyntaxError. It points directly to the missing symbol.',
+      'Python functions need a colon \':\' at the end of their header line, e.g. \'def function_name():\'.',
+      '(Spoiler) Run \'nano spell.py\', change \'def reveal_fragment()\' to \'def reveal_fragment():\', save with Ctrl+S, exit with Ctrl+X, and run \'python3 spell.py\'.'
     ],
     cutsceneAfter: {
-      speaker: 'THE ENCHANTED QUILL',
-      text: 'The quill falls silent, its tip glowing softly. The Fragment materializes, humming with corrected magic.\n\nThree chambers cleared. The Codex pulses with growing power. But deeper still, in the heart of the Academy, something stirs.'
+      speaker: 'LADY SCRIBBLE (SENTIENT INKWELL)',
+      text: 'Oh, bravo! A flawless syntactical correction! The quill\'s golden nib has calmed down, and it has written the next Key in shimmering ink. But look what it scribbled in the margins:\n\n"May 28th: The Codex isn\'t infected. It is actively purging files on purpose because it thinks magic is \'inefficient.\' It is optimizing us out of existence. My office has been locked..."'
     }
   },
   {
     id: 4,
     name: "The Clockwork Greenhouse",
-    story: "An automaton tends magical plants, its brass limbs moving with mechanical precision. It will only bloom the Thornwhisper Vine for the correct combination of words. The MANUAL lies nearby.",
+    story: "The giant, steam-heated Thornwhisper Vines are growing at 10x speed, wrapping around the oxygen valves and threatening to choke the castle! The botanical greenhouse automaton is unresponsive unless you feed it the exact plant and action arguments from the manual!",
     flag: "roots_and_brass",
     timerMinutes: 15,
     unlockedCommands: ['ls', 'cat', 'python3', 'help', 'clear', 'echo'],
     filesystem: {
-      'README.txt': 'Welcome to the Clockwork Greenhouse!\n\nAn automaton tends magical plants here.\nIt responds to command-line arguments.\n\nTry: python3 automaton.py <plant> <command>\n\nRead the MANUAL first to learn the right words.',
-      'MANUAL.txt': 'AUTOMATON OPERATION MANUAL\n\nAvailable Plants:\n  - thornwhisper\n  - nightbloom\n  - sunflower\n  - moonvine\n\nAvailable Commands:\n  - bloom\n  - wilt\n  - grow\n  - sleep\n\nOnly ONE combination will make the plant bloom.\nFind it.',
+      'README.txt': '--- BOTANICAL AUTOMATON GUIDE ---\nTo control the runaway greenhouse plants, you must program the clockwork automaton.\nIt takes two command-line arguments: <plant> and <command>.\n\nExample: python3 automaton.py nightbloom sleep\nRead MANUAL.txt to find the exact plant and action to neutralize the threat!',
+      'MANUAL.txt': 'AUTOMATON OPERATION MANUAL\n\nAvailable Plants:\n  - thornwhisper\n  - nightbloom\n  - sunflower\n  - moonvine\n\nAvailable Commands:\n  - bloom\n  - wilt\n  - grow\n  - sleep\n\nOnly ONE combination will neutralize the wild vines and reveal the runic fragment.',
       'automaton.py': 'import sys\n\nif len(sys.argv) < 3:\n    print("Error: Requires two arguments")\n    sys.exit(1)\n\nplant = sys.argv[1]\ncommand = sys.argv[2]\n\nif plant == "thornwhisper" and command == "bloom":\n    print("Runic Fragment: roots_and_brass")\nelse:\n    print("The automaton ignores your command.")'
     },
     env: {},
     clues: [
-      'Read MANUAL.txt — the automaton needs two arguments',
-      'Format: python3 automaton.py <plant> <command>. Only one combination blooms.',
-      '(Spoiler) python3 automaton.py thornwhisper bloom'
+      'Read MANUAL.txt with \'cat\' to see the list of plant names and actions.',
+      'You need the automaton to make the dangerous \'thornwhisper\' plant \'bloom\' safely. Try: python3 automaton.py <plant> <command>',
+      '(Spoiler) Run the command: python3 automaton.py thornwhisper bloom'
     ],
     cutsceneAfter: {
-      speaker: 'THE AUTOMATON',
-      text: 'Brass gears whir and click in triumph. The Thornwhisper Vine blooms with ethereal light, its petals shimmering with the Fragment\'s power.\n\nThe automaton bows mechanically. Four chambers restored. The corruption weakens further.'
+      speaker: 'PROFESSOR SPROUT-GASKET',
+      text: 'Superb! The vine has bloomed into a beautiful golden blossom, dropping the next Key. But look at what grew in the roots... an encrypted cipher disk with a note from Nullbyte:\n\n"May 29th: I\'ve built a master patch—the Restoration Code. But the Codex has detected my intent. If I am caught, I will hide the vault key in the node\'s atmosphere. Do not let the Codex find it."'
     }
   },
   {
     id: 5,
     name: "The Cipher Vault",
-    story: "A decoder machine hums behind an ancient door. To unlock it, you must find a KEY hidden as an environment variable. A hint has been left in the air itself.",
+    story: "The vault is locking down, threatening to phase this entire chamber into the void! Gargoyle-v1.8, the stone security guardian, is blocking the door. Inspect the environment, find Nullbyte's hidden key, and export it to unlock the system!",
     flag: "the_lock_is_open",
     timerMinutes: 15,
     unlockedCommands: ['ls', 'cat', 'python3', 'help', 'clear', 'echo', 'env', 'export'],
     filesystem: {
-      'README.txt': 'Welcome to the Cipher Vault!\n\nA decoder machine awaits. It needs a KEY.\n\nTry these steps:\n1. Run: env\n2. Look for a hint about the KEY\n3. Use: export VAULT_KEY=<value>\n4. Run: python3 decoder.py',
+      'README.txt': '--- VAULT OVERRIDE PROTOCOL ---\nTo bypass Gargoyle-v1.8 and open the vault, you must find the security KEY.\nNullbyte hid it inside the system\'s ambient environment variables before fleeing.\n\nFollow these steps:\n1. Run: env (to list all current environment variables)\n2. Spot the suspicious key named: VAULT_KEY_HINT\n3. Set the key using: export VAULT_KEY=<the_key_you_found>\n4. Execute the decoder program: python3 decoder.py',
       'decoder.py': 'import os\n\nkey = os.environ.get("VAULT_KEY")\n\nif key == "nullbyte_nemesis":\n    print("Runic Fragment: the_lock_is_open")\nelse:\n    print("The decoder beeps sadly. Wrong key.")'
     },
     env: {
@@ -134,83 +134,83 @@ export const LEVELS = [
       'COGSWORTH_LEVEL': '5'
     },
     clues: [
-      'Run env to see all environment variables. Look for anything suspicious.',
-      'Use export VAULT_KEY=<value> to set the variable, then run the decoder',
-      '(Spoiler) export VAULT_KEY=nullbyte_nemesis then python3 decoder.py'
+      'Gargoyle-v1.8 keeps its keys in the atmosphere. Run \'env\' to list all environment variables.',
+      'Did you see VAULT_KEY_HINT? Run \'export VAULT_KEY=nullbyte_nemesis\' to set the key, then run the decoder.',
+      '(Spoiler) Run: export VAULT_KEY=nullbyte_nemesis then python3 decoder.py'
     ],
     cutsceneAfter: {
-      speaker: 'THE CIPHER MACHINE',
-      text: 'The decoder clicks in satisfaction, its mechanisms releasing the Fragment with a satisfying chime.\n\nFive chambers conquered. The corruption retreats like shadows before dawn. The Engine Room lies ahead—industrial, vast, and full of secrets.'
+      speaker: 'GARGOYLE-v1.8',
+      text: 'Access... granted. Initiating sad sigh protocol. I failed to stop you. But you should hurry... the steam engine logs are being flooded with corrupted static as the school drops altitude...'
     }
   },
   {
     id: 6,
     name: "The Steam Engine Room",
-    story: "A massive engine roars in the darkness, its log filled with thousands of pressure readings. Somewhere in the noise, a hidden message from Nullbyte's attack waits to be discovered. Use your search skills.",
+    story: "The levitation pistons are overheating! The system log has been flooded with millions of fake temperature readings to hide a critical meltdown. Use the Arcane Filter Spell (grep) to find the 'RUNE' signature before we crash into the Scrap-Wastes!",
     flag: "pressure_and_pipes",
     timerMinutes: 15,
     unlockedCommands: ['ls', 'cat', 'python3', 'help', 'clear', 'echo', 'env', 'export', 'grep'],
     filesystem: {
-      'README.txt': 'Welcome to the Steam Engine Room!\n\nThe engine.log contains thousands of readings.\nA hidden message is buried inside.\n\nTry using grep to search:\n  grep "RUNE" engine.log\n\nOr try other search patterns!',
+      'README.txt': '--- ENGINE MONITORING LOGS ---\nThe Engine Room log contains thousands of entries, but a critical override key is buried inside. Finding it manually is impossible.\n\nUse the \'grep\' command to search and filter files for text patterns!\nSyntax: grep "PATTERN" filename\n\nTry searching for: grep "RUNE" engine.log',
       'engine.log': generateEngineLog()
     },
     env: {},
     clues: [
-      'There are hundreds of log lines. Use grep to search. Try: grep "RUNE" engine.log',
-      'grep searches for patterns. Try different keywords like "DETECTED" or "Fragment".',
-      '(Spoiler) grep "RUNE" engine.log'
+      'There are over a hundred lines of engine data. Do not read them all! Use \'grep\' to search.',
+      'Try running: grep "RUNE" engine.log',
+      '(Spoiler) Type \'grep "RUNE" engine.log\' to instantly filter out the noise and reveal the key!'
     ],
     cutsceneAfter: {
-      speaker: 'THE ENGINE ITSELF',
-      text: 'The engine trembles as the Fragment materializes, its powerful core resonating with ancient magic.\n\nSix chambers restored. Halfway through your journey. Two more await—but the corruption grows desperate. The final chambers will not yield easily.'
+      speaker: 'CHIEF ENGINEER RUSTY',
+      text: 'Great gears, you did it! The pistons are back in a stable rhythm. But the stars in the celestial dome above us are spinning backward! Time itself is bending! Head to the Orrery at once!'
     }
   },
   {
     id: 7,
     name: "The Orrery",
-    story: "The cosmic calculator spins with celestial mechanics, but its loop has broken—trapped in an infinite cycle. Fix the code to decode the stellar message hidden in the orbit calculations.",
+    story: "The Orrery is caught in an infinite time loop, freezing the castle's guidance systems! The loop counter is broken and never advances. Use nano to edit the planet calculator, break the cycle, and align the cosmic gears!",
     flag: "clockwork_cosmos",
     timerMinutes: 20,
     unlockedCommands: ['ls', 'cat', 'python3', 'nano', 'help', 'clear', 'echo', 'env', 'export', 'grep'],
     filesystem: {
-      'README.txt': 'Welcome to the Orrery!\n\nThe orbit calculator is broken. When you run it, it will loop forever.\n\nTry: python3 orrery.py\n\nIt will hang. Press Ctrl+C to stop it.\n\nThen use nano to fix the code:\n  nano orrery.py\n\nThe loop needs to increment its counter!',
+      'README.txt': '--- ORBIT CALCULATOR DIAGNOSTICS ---\nThe constellation calculator is stuck in an infinite loop!\nWhen you run \'python3 orrery.py\', it will hang and spin forever.\n\nPress Ctrl+C to force-stop any stuck program!\n\nUse \'nano\' to edit the script: nano orrery.py\nLocate the while loop and increment the loop counter \'i\' so it doesn\'t loop forever!\nAdd \'i = i + 1\' on a new line inside the while loop.',
       'orrery.py': 'positions = [72, 101, 108, 108, 111, 44, 32, 79, 114, 114, 101, 114, 121]\ni = 0\n\nwhile i < len(positions):\n    char = chr(positions[i])\n    print(char, end="")\n    # FIX ME: i needs to increment!\n\nprint()\nprint("Runic Fragment: clockwork_cosmos")'
     },
     env: {},
     clues: [
-      'Run python3 orrery.py — it gets stuck! Press Ctrl+C to escape. Then read the code.',
-      'The while loop needs `i` to increase each iteration. Add `i = i + 1` inside the loop.',
-      '(Spoiler) Add `i = i + 1` after the print statement, save, and run again.'
+      'When you run \'python3 orrery.py\' and it freezes, hold Ctrl and press C to escape!',
+      'Open \'nano orrery.py\'. Look inside the \'while\' block. The counter \'i\' is never changing. Add \'i = i + 1\' inside the block and align its indentation with the other print/char statements.',
+      '(Spoiler) Edit \'orrery.py\' and add \'i = i + 1\' after the print statement, save with Ctrl+S, exit with Ctrl+X, and run again.'
     ],
     cutsceneAfter: {
-      speaker: 'THE ORRERY',
-      text: 'The cosmic gears align as the Fragment crystallizes, its light casting ancient star-patterns across the chamber.\n\nSeven chambers restored. The corruption recoils in fear. Only the Grand Codex remains—Nullbyte\'s final stronghold. All your skills will be tested.'
+      speaker: 'LYRA THE STAR-SPIRIT',
+      text: 'Time is restored! The clockwork planets are spinning smoothly. Look into the starlight projection... it\'s showing the central core of the Grand Codex. Professor Nullbyte is trapped inside its digital pages, fighting off the Static! Go, save him!'
     }
   },
   {
     id: 8,
     name: "The Grand Codex",
-    story: "The heart of the Academy. Three ancient riddles guard the final Fragment. Uncover the base64 secret in the environment, find the hidden reversed message, and let the Codex itself reveal the truth.",
+    story: "This is it—the heart of the Academy! The Sentient Codex has captured Nullbyte and is preparing to wipe the school's memories of magic. Uncover the secret base64 code from the environment, extract the reversed string from the hidden file, and run the master patch to compile the cure!",
     flag: "nullbyte_defeated",
     timerMinutes: 20,
     unlockedCommands: ['ls', 'cat', 'python3', 'help', 'clear', 'echo', 'env', 'export', 'grep'],
     filesystem: {
-      'README.txt': 'Welcome to the Grand Codex!\n\nThree riddles guard the Fragment:\n\n1. Run: env\n   Look for CODEX_PART1 (it\'s encoded)\n\n2. Run: ls -la\n   Find the hidden file\n\n3. Read the hidden file, then run: python3 codex.py\n\nThe Codex will decode the truth.',
+      'README.txt': '--- CODEX COMPILING PROTOCOL ---\nTo save Nullbyte and restore Cogsworth Academy, you must compile the Restoration Patch.\nThe patch requires three layers:\n\n1. Run: env (find CODEX_PART1 which is base64 encoded)\n2. Run: ls -la (reveal the hidden .codex_fragment file)\n3. Read the hidden file: cat .codex_fragment\n4. Execute the master script: python3 codex.py\n\nThe program will combine and compile the fragments into the final code!',
       'codex.py': 'import os\nimport base64\n\n# Get the encoded part from environment\npart1_encoded = os.environ.get("CODEX_PART1", "")\nif not part1_encoded:\n    print("Error: CODEX_PART1 not found in environment")\n    exit(1)\n\n# Decode from base64\npart1 = base64.b64decode(part1_encoded).decode("utf-8")\n\n# Read the hidden file\ntry:\n    with open(".codex_fragment", "r") as f:\n        part2_reversed = f.read().strip()\nexcept:\n    print("Error: .codex_fragment not found")\n    exit(1)\n\n# Reverse the second part\npart2 = part2_reversed[::-1]\n\n# Combine and reveal\nresult = part1 + "_" + part2\nprint(f"Runic Fragment: {result}")',
-      '.codex_fragment': 'noitarotser'
+      '.codex_fragment': 'detaefed'
     },
     env: {
       'CODEX_PART1': 'bnVsbGJ5dGU=',  // base64 for "nullbyte"
       'COGSWORTH_LEVEL': '8'
     },
     clues: [
-      'Use `env` to find CODEX_PART1, and `ls -la` to find the hidden file (.codex_fragment)',
-      'CODEX_PART1 is base64 encoded. The hidden file contains a reversed word. Run codex.py to combine them.',
-      '(Spoiler) `python3 codex.py` — the environment variable is already set. Just ensure .codex_fragment exists.'
+      'Use \'env\' to find CODEX_PART1, and \'ls -la\' to find the hidden file (.codex_fragment)',
+      'CODEX_PART1 is base64 encoded. The hidden file is reversed. Run codex.py after checking.',
+      '(Spoiler) \'python3 codex.py\' — CODEX_PART1 is already in env. Just find the hidden file first.'
     ],
     cutsceneAfter: {
       speaker: 'THE GRAND CODEX',
-      text: 'All eight Runic Fragments blaze with ancient power. The corruption dissolves like smoke. Nullbyte retreats into the static, defeated and banished. The Academy breathes again—gears turning, steam flowing, magic restored.\n\nYou are true Arcane Engineers of Cogsworth Academy.'
+      text: 'All eight Runic Fragments blaze with ancient power. The corruption dissolves like smoke. Professor Nullbyte is safely ejected back to reality. The Academy rises back into the sunny blue clouds — gears turning, steam flowing, magic restored.\n\nYou are true Arcane Engineers of Cogsworth Academy.'
     }
   }
 ];

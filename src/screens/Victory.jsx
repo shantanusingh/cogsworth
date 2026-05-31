@@ -66,9 +66,7 @@ export default function Victory({ onPlayAgain }) {
             marginBottom: '48px'
           }}
         >
-          All eight Runic Fragments have been restored. The corruption dissolves.
-          Nullbyte retreats into the static. The Academy breathes again — gears turning,
-          steam flowing, spells working.
+          All eight Runic Fragments have been restored. The corruption dissolves, and Professor Nullbyte is safely returned to reality. The Academy rises back into the sunny blue clouds — gears turning, steam flowing, magic working.
         </p>
 
         <p

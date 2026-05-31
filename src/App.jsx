@@ -42,21 +42,26 @@ export default function App() {
   };
 
   const handleLevelComplete = (nextLevel) => {
+    console.log('handleLevelComplete called with nextLevel:', nextLevel);
     // nextLevel is the level number we just advanced to
     if (nextLevel > 8) {
       // All 8 chambers complete!
+      console.log('All levels complete, showing victory screen');
       setScreen('victory');
     } else {
       // Update room state with new level
       setRoom(prev => ({ ...prev, current_level: nextLevel }));
       // Get the cutscene for the level we just completed
       const completedLevel = getLevelByNumber(nextLevel - 1);
+      console.log('Looking for cutscene after level', nextLevel - 1, 'found:', !!completedLevel?.cutsceneAfter);
       if (completedLevel && completedLevel.cutsceneAfter) {
         // Show cutscene between levels
+        console.log('Setting cutscene content and screen to cutscene');
         setCutsceneContent(completedLevel.cutsceneAfter);
         setScreen('cutscene');
       } else {
         // No cutscene, go directly to next level
+        console.log('No cutscene found, going directly to game');
         setScreen('game');
       }
     }
