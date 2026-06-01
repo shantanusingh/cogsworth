@@ -10,10 +10,11 @@ import CheatSheet from '../components/CheatSheet.jsx';
 import { getLevelByNumber } from '../engine/levels.js';
 import { createFilesystem, listFiles, readFile, writeFile, isEditableFile } from '../engine/filesystem.js';
 import { handleCommand } from '../engine/commands.js';
-import { advanceLevel, sendChatMessage, subscribeToChat, subscribeToTerminalActivity, broadcastTerminalOutput } from '../lib/supabase.js';
+import { advanceLevel, sendChatMessage, subscribeToChat, subscribeToTerminalActivity, broadcastTerminalOutput, subscribeToRoom } from '../lib/supabase.js';
 import audioManager, { AMBIENT_CONFIGS } from '../components/AudioManager.jsx';
 
-export default function Game({ room, player, onLevelComplete }) {
+export default function Game({ room: initialRoom, player, onLevelComplete }) {
+  const [room, setRoom] = useState(initialRoom);
   const level = getLevelByNumber(room.current_level || 1);
   const terminalRef = useRef(null);
   const fsRef = useRef(null);
@@ -27,9 +28,8 @@ export default function Game({ room, player, onLevelComplete }) {
 
   // Initialize filesystem and play ambient music
   useEffect(() => {
-    if (!fsRef.current) {
-      fsRef.current = createFilesystem(level);
-    }
+    fsRef.current = createFilesystem(level);
+    envRef.current = { ...level.env };
 
     // Play Shadowland track for the current level
     const playAudio = async () => {
@@ -45,6 +45,17 @@ export default function Game({ room, player, onLevelComplete }) {
       // Optionally fade out on unmount
     };
   }, [level, room.current_level]);
+
+  // Subscribe to room changes (for level advancement)
+  useEffect(() => {
+    const subscription = subscribeToRoom(room.id, (payload) => {
+      if (payload.new) {
+        setRoom(payload.new);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [room.id]);
 
   // Subscribe to chat
   useEffect(() => {
@@ -219,7 +230,7 @@ export default function Game({ room, player, onLevelComplete }) {
         </div>
 
         {/* Right side: Activity + Chat */}
-        <div style={{ display: 'flex', flexDirection: 'column', width: '260px', borderLeft: '1px solid #d4a843', backgroundColor: '#0a0a0f' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', width: '260px', borderLeft: '1px solid #d4a843', backgroundColor: '#0a0a0f', maxHeight: '100%', overflow: 'hidden' }}>
           <ActivityPanel activities={activities} />
           <ChatPanel roomId={room.id} username={player.username} messages={messages} />
         </div>

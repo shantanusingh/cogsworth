@@ -31,7 +31,8 @@ export default function ActivityPanel({ activities = [] }) {
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
-        borderBottom: '1px solid #d4a843'
+        borderBottom: '1px solid #d4a843',
+        minHeight: 0
       }}
     >
       <div
