@@ -58,10 +58,13 @@ sys.stdout = _stdout
 sys.stderr = _stderr
 `);
 
-    // Set environment variables
-    Object.entries(env).forEach(([key, value]) => {
-      py.runPython(`import os; os.environ['${key}'] = '${value.replace(/'/g, "\\'")}'`);
-    });
+    // Set environment variables safely
+    py.runPython(`
+import os
+_env_dict = ${JSON.stringify(env)}
+for key, value in _env_dict.items():
+    os.environ[str(key)] = str(value)
+`);
 
     // Set sys.argv
     const argv = [args[0] || 'script', ...args.slice(1)];
